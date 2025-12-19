@@ -9,17 +9,26 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 
-  const { data: user } = await supabase
+  const { data: user, error: userError } = await supabase
     .from('users')
     .select('id')
     .eq('username', decoded.username)
     .single();
 
-  const { data: event } = await supabase
+  if (userError || !user) {
+    return NextResponse.json({ error: 'User not found' }, { status: 404 });
+  }
+
+  const { data: event, error } = await supabase
     .from('events')
     .select('*')
     .eq('host_id', user.id)
     .single();
 
-  return NextResponse.json(event || { location: '', date: '', time: '' });
+  if (error || !event) {
+    // Return empty event if none exists yet
+    return NextResponse.json({ location: '', date: '', time: '' });
+  }
+
+  return NextResponse.json(event);
 }

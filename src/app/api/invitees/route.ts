@@ -9,17 +9,25 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 
-  const { data: user } = await supabase
+  const { data: user, error: userError } = await supabase
     .from('users')
     .select('id')
     .eq('username', decoded.username)
     .single();
 
-  const { data: invitees } = await supabase
+  if (userError || !user) {
+    return NextResponse.json({ error: 'User not found' }, { status: 404 });
+  }
+
+  const { data: invitees, error } = await supabase
     .from('invitees')
     .select('*')
     .eq('host_id', user.id)
     .order('created_at', { ascending: false });
+
+  if (error) {
+    return NextResponse.json([], { status: 200 }); // Return empty array on error
+  }
 
   return NextResponse.json(invitees || []);
 }
