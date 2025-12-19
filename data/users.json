@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "username": "superadmin",
+    "password": "$2b$12$acXoCzyjsdns2j.pVZ7HQur2yvpK4knnQ6LWLH2pcuS3uKKI0/s9S",
+    "role": "superadmin"
+  },
+  {
+    "id": 2,
+    "username": "taha",
+    "password": "$2b$10$fJHeQWJpsla.kE9FzCxPqeuG/dOIjVLoP1hey3jPDf0l5SHHXhaGK",
+    "role": "admin"
+  },
+  {
+    "id": 3,
+    "username": "hussain",
+    "password": "$2b$10$Tbh8qNQxWRQKeSkmP0RxTO4nFBou/yfWiJl882TuOaEhhYKDwfkTm",
+    "role": "admin"
+  },
+  {
+    "id": 4,
+    "username": "Hussain",
+    "password": "$2b$10$2qc4vJE9.Jp36KgtvYu5LeZ30dLCE.luT5QUJd.69CwpvBygg4mya",
+    "role": "admin"
+  }
+]
