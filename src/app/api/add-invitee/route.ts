@@ -15,11 +15,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
   }
 
-  const { data: user } = await supabase
+  // Fetch the user safely
+  const { data: user, error: userError } = await supabase
     .from('users')
     .select('id')
     .eq('username', decoded.username)
     .single();
+
+  if (userError || !user) {
+    return NextResponse.json({ error: 'User not found' }, { status: 404 });
+  }
 
   const unique_id = crypto.randomUUID();
 
@@ -33,7 +38,10 @@ export async function POST(req: NextRequest) {
       family_size,
     });
 
-  if (error) return NextResponse.json({ error: 'Failed to add' }, { status: 500 });
+  if (error) {
+    console.error('Supabase insert error:', error);
+    return NextResponse.json({ error: 'Failed to add invitee' }, { status: 500 });
+  }
 
   return NextResponse.json({ success: true });
 }

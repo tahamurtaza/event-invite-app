@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
     .order('created_at', { ascending: false });
 
   if (error) {
-    return NextResponse.json([], { status: 200 }); // Return empty array on error
+    return NextResponse.json([]);
   }
 
   return NextResponse.json(invitees || []);

@@ -26,7 +26,6 @@ export async function GET(req: NextRequest) {
     .single();
 
   if (error || !event) {
-    // Return empty event if none exists yet
     return NextResponse.json({ location: '', date: '', time: '' });
   }
 
