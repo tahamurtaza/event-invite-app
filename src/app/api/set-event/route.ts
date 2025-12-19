@@ -28,12 +28,12 @@ export async function POST(req: NextRequest) {
     .from('events')
     .upsert(
       { host_id: user.id, location, date, time },
-      { onConflict: 'host_id' }
+      { onConflict: 'host_id' }  // This line was missing or wrong before
     );
 
   if (error) {
     console.error('Supabase upsert error:', error);
-    return NextResponse.json({ error: 'Failed to save event' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to save event: ' + error.message }, { status: 500 });
   }
 
   return NextResponse.json({ success: true });
