@@ -7,13 +7,16 @@ export async function GET(req: NextRequest) {
 
   if (!id) return NextResponse.json({ error: 'Missing id' }, { status: 400 });
 
-  const { data: invitee, error } = await supabase
+  const { data: inviteeData, error } = await supabase
     .from('invitees')
     .select('*, events(location, date, time)')
-    .eq('unique_id', id)
-    .single();
+    .eq('unique_id', id);
 
-  if (error || !invitee) return NextResponse.json({ error: 'Invalid invitation' }, { status: 404 });
+  if (error || !inviteeData || inviteeData.length === 0) {
+    return NextResponse.json({ error: 'Invalid invitation' }, { status: 404 });
+  }
+
+  const invitee = inviteeData[0];
 
   const event = {
     location: invitee.events?.location || '',
@@ -21,8 +24,8 @@ export async function GET(req: NextRequest) {
     time: invitee.events?.time || '',
   };
 
-  // Remove the joined events object
-  const { events, ...inviteeWithoutEvents } = invitee;
+  // Remove the joined events object from invitee
+  const { events, ...inviteeClean } = invitee;
 
-  return NextResponse.json({ invitee: inviteeWithoutEvents, event });
+  return NextResponse.json({ invitee: inviteeClean, event });
 }
