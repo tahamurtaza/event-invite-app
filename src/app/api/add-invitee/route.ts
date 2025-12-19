@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
-import crypto from 'crypto';
+import { supabase } from '@/lib/supabase';
 import { verifyToken } from '@/lib/auth';
-import { getHostInviteesPath } from '@/lib/host';
+import crypto from 'crypto';
 
 export async function POST(req: NextRequest) {
   const token = req.headers.get('authorization')?.replace('Bearer ', '');
@@ -16,25 +15,25 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
   }
 
-  const username = decoded.username;
-  const inviteesPath = getHostInviteesPath(username);
+  const { data: user } = await supabase
+    .from('users')
+    .select('id')
+    .eq('username', decoded.username)
+    .single();
 
-  const invitees = fs.existsSync(inviteesPath)
-    ? JSON.parse(fs.readFileSync(inviteesPath, 'utf8'))
-    : [];
+  const unique_id = crypto.randomUUID();
 
-  const uniqueId = crypto.randomUUID();
-  const newInvitee = {
-    id: invitees.length + 1,
-    name,
-    phone,
-    uniqueId,
-    family_size: Number(family_size),
-    rsvp_coming: null,
-    rsvp_people: 0
-  };
-  invitees.push(newInvitee);
-  fs.writeFileSync(inviteesPath, JSON.stringify(invitees, null, 2));
+  const { error } = await supabase
+    .from('invitees')
+    .insert({
+      host_id: user.id,
+      name,
+      phone,
+      unique_id,
+      family_size,
+    });
+
+  if (error) return NextResponse.json({ error: 'Failed to add' }, { status: 500 });
 
   return NextResponse.json({ success: true });
 }

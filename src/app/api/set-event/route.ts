@@ -1,40 +1,30 @@
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import { supabase } from '@/lib/supabase';
 import { verifyToken } from '@/lib/auth';
-
-const hostsDir = path.join(process.cwd(), 'data/hosts');
 
 export async function POST(req: NextRequest) {
   const token = req.headers.get('authorization')?.replace('Bearer ', '');
   const decoded = verifyToken(token);
-
   if (!decoded || (decoded.role !== 'admin' && decoded.role !== 'superadmin')) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 
   const { location, date, time } = await req.json();
-
   if (!location || !date || !time) {
-    return NextResponse.json({ error: 'All fields are required' }, { status: 400 });
+    return NextResponse.json({ error: 'All fields required' }, { status: 400 });
   }
 
-  const username = decoded.username;
-  const hostDir = path.join(hostsDir, username);
-  const eventPath = path.join(hostDir, 'event.json');
+  const { data: user } = await supabase
+    .from('users')
+    .select('id')
+    .eq('username', decoded.username)
+    .single();
 
-  try {
-    // Ensure host directory exists
-    if (!fs.existsSync(hostDir)) {
-      fs.mkdirSync(hostDir, { recursive: true });
-    }
+  const { error } = await supabase
+    .from('events')
+    .upsert({ host_id: user.id, location, date, time }, { onConflict: 'host_id' });
 
-    const eventData = { location: location.trim(), date: date.trim(), time: time.trim() };
-    fs.writeFileSync(eventPath, JSON.stringify(eventData, null, 2));
+  if (error) return NextResponse.json({ error: 'Failed to save' }, { status: 500 });
 
-    return NextResponse.json({ success: true });
-  } catch (error: any) {
-    console.error('Error saving event:', error);
-    return NextResponse.json({ error: 'Failed to save event: ' + error.message }, { status: 500 });
-  }
+  return NextResponse.json({ success: true });
 }

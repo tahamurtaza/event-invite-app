@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
+import { supabase } from '@/lib/supabase';
 import { verifyToken } from '@/lib/auth';
-import { getHostInviteesPath } from '@/lib/host';
 
 export async function GET(req: NextRequest) {
   const token = req.headers.get('authorization')?.replace('Bearer ', '');
@@ -10,13 +9,17 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 
-  const username = decoded.username;
-  const inviteesPath = getHostInviteesPath(username);
+  const { data: user } = await supabase
+    .from('users')
+    .select('id')
+    .eq('username', decoded.username)
+    .single();
 
-  if (!fs.existsSync(inviteesPath)) {
-    return NextResponse.json([]);
-  }
+  const { data: invitees } = await supabase
+    .from('invitees')
+    .select('*')
+    .eq('host_id', user.id)
+    .order('created_at', { ascending: false });
 
-  const invitees = JSON.parse(fs.readFileSync(inviteesPath, 'utf8'));
-  return NextResponse.json(invitees);
+  return NextResponse.json(invitees || []);
 }
