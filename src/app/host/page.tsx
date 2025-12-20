@@ -202,11 +202,11 @@ export default function Host() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
-      <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6 shadow-xl">
+    <div className="min-h-screen bg-gray-50">
+      <div className="bg-green-600 text-white p-6 shadow-lg">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <h1 className="text-4xl font-extrabold">Host Dashboard</h1>
-          <button onClick={handleLogout} className="bg-red-600 hover:bg-red-700 px-8 py-3 rounded-xl text-xl font-bold transition">
+          <h1 className="text-3xl font-bold">Host Dashboard</h1>
+          <button onClick={handleLogout} className="bg-red-500 hover:bg-red-600 px-6 py-3 rounded-lg text-lg font-medium transition">
             Logout
           </button>
         </div>
@@ -214,50 +214,45 @@ export default function Host() {
 
       <div className="max-w-7xl mx-auto mt-10 p-6 space-y-10">
 
-        {/* Attendance Summary - Three Columns */}
-        <div className="bg-white p-10 rounded-3xl shadow-2xl">
-          <h2 className="text-4xl font-extrabold text-center mb-12 text-gray-800">Attendance Summary</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            {/* Attending */}
-            <div className="bg-gradient-to-br from-green-100 to-green-200 p-12 rounded-3xl text-center shadow-2xl border-8 border-green-400">
-              <p className="text-8xl font-extrabold text-green-700">{summary.attending}</p>
-              <p className="text-3xl font-bold text-green-800 mt-6">Attending</p>
+        {/* Attendance Summary */}
+        <div className="bg-white p-8 rounded-xl shadow-lg">
+          <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">Attendance Summary</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-green-100 p-8 rounded-xl text-center shadow-md">
+              <p className="text-6xl font-bold text-green-700">{summary.attending}</p>
+              <p className="text-2xl font-medium text-green-800 mt-4">Attending</p>
             </div>
-
-            {/* Not Attending */}
-            <div className="bg-gradient-to-br from-red-100 to-red-200 p-12 rounded-3xl text-center shadow-2xl border-8 border-red-400">
-              <p className="text-8xl font-extrabold text-red-700">{summary.notAttending}</p>
-              <p className="text-3xl font-bold text-red-800 mt-6">Not Attending</p>
+            <div className="bg-red-100 p-8 rounded-xl text-center shadow-md">
+              <p className="text-6xl font-bold text-red-700">{summary.notAttending}</p>
+              <p className="text-2xl font-medium text-red-800 mt-4">Not Attending</p>
             </div>
-
-            {/* Pending */}
-            <div className="bg-gradient-to-br from-yellow-100 to-yellow-200 p-12 rounded-3xl text-center shadow-2xl border-8 border-yellow-400">
-              <p className="text-8xl font-extrabold text-yellow-700">{summary.pending}</p>
-              <p className="text-3xl font-bold text-yellow-800 mt-6">Pending</p>
+            <div className="bg-yellow-100 p-8 rounded-xl text-center shadow-md">
+              <p className="text-6xl font-bold text-yellow-700">{summary.pending}</p>
+              <p className="text-2xl font-medium text-yellow-800 mt-4">Pending</p>
             </div>
           </div>
         </div>
 
         {/* Current Event Details + Edit Button */}
-        <div className="bg-white p-10 rounded-3xl shadow-2xl">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-800">Current Event Details</h2>
+        <div className="bg-white p-8 rounded-xl shadow-lg">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-gray-800">Current Event Details</h2>
             <button
               onClick={() => setShowEditForm(!showEditForm)}
-              className="bg-purple-600 text-white px-8 py-4 rounded-xl text-xl font-bold hover:bg-purple-700 transition"
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg text-lg font-medium hover:bg-blue-700 transition"
             >
               {showEditForm ? 'Cancel' : 'Edit Event Details'}
             </button>
           </div>
 
-          <div className="bg-gradient-to-r from-purple-100 to-blue-100 p-10 rounded-2xl">
-            <p className="text-2xl mb-4 text-gray-800"><strong>Location:</strong> {event.location || 'Not set'}</p>
-            <p className="text-2xl mb-4 text-gray-800"><strong>Date:</strong> {event.date || 'Not set'}</p>
-            <p className="text-2xl text-gray-800"><strong>Time:</strong> {event.time || 'Not set'}</p>
+          <div className="bg-gray-100 p-6 rounded-lg">
+            <p className="text-lg mb-3 text-gray-800"><strong>Location:</strong> {event.location || 'Not set'}</p>
+            <p className="text-lg mb-3 text-gray-800"><strong>Date:</strong> {event.date || 'Not set'}</p>
+            <p className="text-lg text-gray-800"><strong>Time:</strong> {event.time || 'Not set'}</p>
           </div>
 
           {showEditForm && (
-            <form onSubmit={handleUpdateEvent} className="mt-10 space-y-6">
+            <form onSubmit={handleUpdateEvent} className="mt-8 space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <input
                   type="text"
@@ -265,7 +260,7 @@ export default function Host() {
                   value={editLocation}
                   onChange={(e) => setEditLocation(e.target.value)}
                   required
-                  className="px-6 py-5 border-4 border-purple-300 rounded-xl text-xl focus:border-purple-500 focus:ring-4 focus:ring-purple-200"
+                  className="px-5 py-4 border border-gray-300 rounded-lg text-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                 />
                 <input
                   type="text"
@@ -273,7 +268,7 @@ export default function Host() {
                   value={editDate}
                   onChange={(e) => setEditDate(e.target.value)}
                   required
-                  className="px-6 py-5 border-4 border-purple-300 rounded-xl text-xl focus:border-purple-500 focus:ring-4 focus:ring-purple-200"
+                  className="px-5 py-4 border border-gray-300 rounded-lg text-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                 />
                 <input
                   type="text"
@@ -281,13 +276,13 @@ export default function Host() {
                   value={editTime}
                   onChange={(e) => setEditTime(e.target.value)}
                   required
-                  className="px-6 py-5 border-4 border-purple-300 rounded-xl text-xl focus:border-purple-500 focus:ring-4 focus:ring-purple-200"
+                  className="px-5 py-4 border border-gray-300 rounded-lg text-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                 />
               </div>
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-6 rounded-xl text-2xl font-bold hover:from-purple-700 hover:to-blue-700 transition transform hover:scale-105 shadow-xl"
+                className="w-full bg-blue-600 text-white py-4 rounded-lg text-xl font-medium hover:bg-blue-700 transition"
               >
                 {isLoading ? 'Saving...' : 'Save Changes'}
               </button>
@@ -295,15 +290,15 @@ export default function Host() {
           )}
 
           {eventMessage && (
-            <p className={`mt-8 text-center text-2xl font-bold ${eventMessage.includes('success') ? 'text-green-600' : 'text-red-600'}`}>
+            <p className={`mt-6 text-center text-xl font-medium ${eventMessage.includes('success') ? 'text-green-600' : 'text-red-600'}`}>
               {eventMessage}
             </p>
           )}
         </div>
 
         {/* Add New Invitee */}
-        <div className="bg-white p-10 rounded-3xl shadow-2xl">
-          <h2 className="text-3xl font-bold mb-8 text-gray-800">Add New Invitee</h2>
+        <div className="bg-white p-8 rounded-xl shadow-lg">
+          <h2 className="text-2xl font-bold mb-6 text-gray-800">Add New Invitee</h2>
           <form onSubmit={handleAddInvitee} className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <input
               type="text"
@@ -311,7 +306,7 @@ export default function Host() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="px-6 py-5 border-4 border-purple-300 rounded-xl text-xl focus:border-purple-500 focus:ring-4 focus:ring-purple-200"
+              className="px-5 py-4 border border-gray-300 rounded-lg text-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
             />
             <input
               type="text"
@@ -319,7 +314,7 @@ export default function Host() {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               required
-              className="px-6 py-5 border-4 border-purple-300 rounded-xl text-xl focus:border-purple-500 focus:ring-4 focus:ring-purple-200"
+              className="px-5 py-4 border border-gray-300 rounded-lg text-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
             />
             <input
               type="number"
@@ -327,45 +322,45 @@ export default function Host() {
               value={familySize}
               onChange={(e) => setFamilySize(Math.max(1, parseInt(e.target.value) || 1))}
               min="1"
-              className="px-6 py-5 border-4 border-purple-300 rounded-xl text-xl focus:border-purple-500 focus:ring-4 focus:ring-purple-200"
+              className="px-5 py-4 border border-gray-300 rounded-lg text-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
             />
             <button
               type="submit"
               disabled={isLoading}
-              className="bg-gradient-to-r from-green-600 to-blue-600 text-white py-5 rounded-xl text-2xl font-bold hover:from-green-700 hover:to-blue-700 transition transform hover:scale-105 shadow-xl"
+              className="bg-blue-600 text-white py-4 rounded-lg text-xl font-medium hover:bg-blue-700 transition"
             >
               Add Invitee
             </button>
           </form>
           {message && (
-            <p className={`mt-8 text-center text-2xl font-bold ${message.includes('success') ? 'text-green-600' : 'text-red-600'}`}>
+            <p className={`mt-6 text-center text-xl font-medium ${message.includes('success') ? 'text-green-600' : 'text-red-600'}`}>
               {message}
             </p>
           )}
         </div>
 
         {/* Invitees List */}
-        <div className="bg-white p-10 rounded-3xl shadow-2xl">
-          <h2 className="text-3xl font-bold mb-8 text-gray-800">Invitees ({invitees.length})</h2>
+        <div className="bg-white p-8 rounded-xl shadow-lg">
+          <h2 className="text-2xl font-bold mb-6 text-gray-800">Invitees ({invitees.length})</h2>
           {invitees.length === 0 ? (
-            <p className="text-center text-2xl text-gray-500 py-12">No invitees yet. Add one above!</p>
+            <p className="text-center text-xl text-gray-500 py-10">No invitees yet. Add one above!</p>
           ) : (
             <div className="space-y-6">
               {invitees.map((inv) => (
-                <div key={inv.id} className="flex flex-col md:flex-row justify-between items-start md:items-center p-8 bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl border-4 border-purple-200 shadow-lg">
-                  <div className="mb-6 md:mb-0">
-                    <span className="text-2xl font-bold text-gray-800">{inv.name}</span>
-                    <span className="text-xl text-gray-600 ml-6">{inv.phone}</span>
-                    <span className="text-xl text-gray-600 ml-6">Family: {inv.family_size}</span>
-                    <span className="text-xl font-medium text-purple-700 ml-6">| RSVP: {getRsvpStatus(inv)}</span>
+                <div key={inv.id} className="flex flex-col md:flex-row justify-between items-start md:items-center p-6 bg-gray-50 rounded-lg border border-gray-200">
+                  <div className="mb-4 md:mb-0">
+                    <span className="text-xl font-semibold text-gray-800">{inv.name}</span>
+                    <span className="text-lg text-gray-600 ml-5">{inv.phone}</span>
+                    <span className="text-lg text-gray-600 ml-5">Family: {inv.family_size}</span>
+                    <span className="text-lg font-medium text-blue-600 ml-5">| RSVP: {getRsvpStatus(inv)}</span>
                   </div>
                   <a
                     href={`https://wa.me/${inv.phone.replace(/[^0-9+]/g, '')}?text=${getPrefilledMessage(inv.name, inv)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-gradient-to-r from-green-600 to-blue-600 text-white font-bold py-4 px-10 rounded-xl text-xl transition transform hover:scale-110 shadow-xl flex items-center"
+                    className="bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-8 rounded-lg text-lg transition flex items-center"
                   >
-                    <svg className="w-8 h-8 mr-3" fill="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.297-.446.099-.148.05-.272-.025-.372-.074-.099-.67-1.623-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.626.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
                     </svg>
                     Send WhatsApp Invite
