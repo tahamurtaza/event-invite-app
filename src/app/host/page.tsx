@@ -162,7 +162,7 @@ export default function Host() {
     let errorCount = 0;
 
     for (const line of lines) {
-      if (!line || line.startsWith('name')) continue; // Skip header
+      if (!line || line.startsWith('name')) continue;
       const [name, phone, familySizeStr] = line.split(',').map(s => s.trim());
       if (!name || !phone) {
         errorCount++;
@@ -372,6 +372,32 @@ export default function Host() {
               {message}
             </p>
           )}
+        </div>
+
+        {/* Send All Invitations Privately */}
+        <div className="bg-white p-8 rounded-xl shadow-lg">
+          <h2 className="text-2xl font-bold mb-6 text-gray-800">Send All Invitations Privately</h2>
+          <p className="text-lg text-gray-600 mb-6">
+            Click below to copy personalized messages for all invitees.<br />
+            Then create a <strong>WhatsApp Broadcast List</strong> and paste — each guest gets their own private link!
+          </p>
+          <button
+            onClick={() => {
+              const links = invitees.map(inv => 
+                `Hi ${inv.name},\n\nYou're invited to our event!\n\n` +
+                `Location: ${event.location || 'To be announced'}\n` +
+                `Date: ${event.date || 'To be announced'}\n` +
+                `Time: ${event.time || 'To be announced'}\n\n` +
+                `Please RSVP here: ${baseUrl}/invitation/${inv.unique_id}\n\n` +
+                `Hope to see you there!`
+              ).join('\n\n---\n\n');
+              navigator.clipboard.writeText(links);
+              alert('All private invitation messages copied! Create a WhatsApp Broadcast List and paste them.');
+            }}
+            className="bg-green-600 hover:bg-green-700 text-white py-4 px-10 rounded-lg text-xl font-bold transition shadow-lg"
+          >
+            Copy All Private Messages ({invitees.length})
+          </button>
         </div>
 
         {/* Add New Invitee */}
