@@ -10,7 +10,6 @@ export default function Invitation() {
   const [coming, setComing] = useState<boolean | null>(null);
   const [people, setPeople] = useState(1);
   const [message, setMessage] = useState('');
-  const [submitted, setSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -23,7 +22,6 @@ export default function Invitation() {
           setInvitee(data.invitee);
           setEvent(data.event);
           if (data.invitee.rsvp_coming !== null) {
-            setSubmitted(true);
             setComing(data.invitee.rsvp_coming);
             setPeople(data.invitee.rsvp_people || 1);
           }
@@ -35,7 +33,7 @@ export default function Invitation() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (coming === null) return setMessage('Please select an option');
+    if (coming === null) return setMessage('Please choose an option');
 
     const res = await fetch('/api/rsvp', {
       method: 'POST',
@@ -44,15 +42,16 @@ export default function Invitation() {
     });
 
     if (res.ok) {
-      setMessage('Thank you! Your RSVP is recorded.');
-      setSubmitted(true);
+      setMessage('Your response has been updated!');
     } else {
-      setMessage('Failed to submit. Please try again.');
+      setMessage('Failed to update. Please try again.');
     }
   };
 
-  if (isLoading) return <div className="min-h-screen flex items-center justify-center text-3xl font-bold text-gray-800">Loading Invitation...</div>;
+  if (isLoading) return <div className="min-h-screen flex items-center justify-center text-3xl font-bold text-gray-800">Loading...</div>;
   if (!invitee) return <div className="min-h-screen flex items-center justify-center text-red-600 text-3xl font-bold">{message || 'Invalid Invitation'}</div>;
+
+  const maxPeople = invitee.family_size;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center p-6">
@@ -64,49 +63,54 @@ export default function Invitation() {
           <p className="text-xl mb-4 text-gray-800"><strong>Location:</strong> {event.location || 'To be announced'}</p>
           <p className="text-xl mb-4 text-gray-800"><strong>Date:</strong> {event.date || 'To be announced'}</p>
           <p className="text-xl mb-4 text-gray-800"><strong>Time:</strong> {event.time || 'To be announced'}</p>
-          <p className="text-xl text-gray-800">You + up to {invitee.family_size - 1} guests ({invitee.family_size} total)</p>
+          <p className="text-xl text-gray-800">You + up to {maxPeople - 1} guests ({maxPeople} total)</p>
         </div>
 
-        {!submitted ? (
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-4">
-              <label className="flex items-center text-xl font-medium text-gray-800">
-                <input type="radio" name="coming" checked={coming === true} onChange={() => setComing(true)} className="mr-3 w-6 h-6" />
-                Yes, we're coming! 🎉
-              </label>
-              <label className="flex items-center text-xl font-medium text-gray-800">
-                <input type="radio" name="coming" checked={coming === false} onChange={() => setComing(false)} className="mr-3 w-6 h-6" />
-                Sorry, can't make it 😢
-              </label>
+        <form onSubmit={handleSubmit} className="space-y-8">
+          <div className="space-y-6">
+            <div className="flex justify-center gap-8">
+              <button
+                type="button"
+                onClick={() => setComing(true)}
+                className={`px-10 py-6 rounded-xl text-2xl font-bold transition transform hover:scale-105 ${coming === true ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-800'}`}
+              >
+                Yes, Coming! 🎉
+              </button>
+              <button
+                type="button"
+                onClick={() => setComing(false)}
+                className={`px-10 py-6 rounded-xl text-2xl font-bold transition transform hover:scale-105 ${coming === false ? 'bg-red-600 text-white' : 'bg-gray-200 text-gray-800'}`}
+              >
+                No, Can't Come 😢
+              </button>
             </div>
-
-            {coming && (
-              <div>
-                <label className="block text-xl font-medium mb-2 text-gray-800">Number of attendees</label>
-                <input
-                  type="number"
-                  value={people}
-                  onChange={(e) => setPeople(Math.min(parseInt(e.target.value) || 1, invitee.family_size))}
-                  min={1}
-                  max={invitee.family_size}
-                  className="w-full px-4 py-3 border-2 border-purple-300 rounded-md text-xl focus:border-purple-500"
-                />
-              </div>
-            )}
-
-            <button type="submit" className="w-full bg-purple-600 text-white py-4 rounded-md text-xl font-medium hover:bg-purple-700 transition">
-              Submit RSVP
-            </button>
-          </form>
-        ) : (
-          <div className="text-center">
-            <p className="text-3xl font-bold text-green-600 mb-4">Thank You!</p>
-            <p className="text-2xl text-gray-800">Your response: {coming ? `Coming with ${people} people` : 'Not Coming'}</p>
           </div>
-        )}
+
+          {coming === true && (
+            <div>
+              <p className="text-2xl text-center mb-6 text-gray-800 font-medium">How many people are coming?</p>
+              <div className="grid grid-cols-3 gap-4">
+                {Array.from({ length: maxPeople }, (_, i) => i + 1).map((num) => (
+                  <button
+                    key={num}
+                    type="button"
+                    onClick={() => setPeople(num)}
+                    className={`py-4 rounded-xl text-2xl font-bold transition transform hover:scale-110 ${people === num ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-800'}`}
+                  >
+                    {num}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <button type="submit" className="w-full bg-purple-600 text-white py-6 rounded-xl text-3xl font-bold hover:bg-purple-700 transition transform hover:scale-105">
+            {coming === null ? 'Choose an Option' : 'Update Response'}
+          </button>
+        </form>
 
         {message && (
-          <p className={`mt-6 text-center text-xl font-medium ${message.includes('Thank') ? 'text-green-600' : 'text-red-600'}`}>
+          <p className={`mt-8 text-center text-2xl font-bold ${message.includes('updated') || message.includes('recorded') ? 'text-green-600' : 'text-red-600'}`}>
             {message}
           </p>
         )}
