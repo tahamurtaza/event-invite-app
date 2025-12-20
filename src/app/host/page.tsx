@@ -8,11 +8,10 @@ export default function Host() {
   const [phone, setPhone] = useState('');
   const [familySize, setFamilySize] = useState(1);
   const [invitees, setInvitees] = useState<any[]>([]);
-  const [event, setEvent] = useState({ location: '', date: '', time: '', theme: 'birthday' });
+  const [event, setEvent] = useState({ location: '', date: '', time: '' });
   const [editLocation, setEditLocation] = useState('');
   const [editDate, setEditDate] = useState('');
   const [editTime, setEditTime] = useState('');
-  const [editTheme, setEditTheme] = useState('birthday');
   const [showEditForm, setShowEditForm] = useState(false);
   const [summary, setSummary] = useState({ coming: 0, notComing: 0, pending: 0, totalPeople: 0 });
   const [message, setMessage] = useState('');
@@ -61,13 +60,6 @@ export default function Host() {
         setEditLocation(data.location || '');
         setEditDate(data.date || '');
         setEditTime(data.time || '');
-        setEditTheme(data.theme || 'birthday');
-      } else {
-        setEvent({ location: '', date: '', time: '', theme: 'birthday' });
-        setEditLocation('');
-        setEditDate('');
-        setEditTime('');
-        setEditTheme('birthday');
       }
     } catch (err) {
       console.error('Failed to fetch event', err);
@@ -166,22 +158,12 @@ export default function Host() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ 
-          location: editLocation.trim(), 
-          date: editDate.trim(), 
-          time: editTime.trim(),
-          theme: editTheme 
-        }),
+        body: JSON.stringify({ location: editLocation.trim(), date: editDate.trim(), time: editTime.trim() }),
       });
 
       if (res.ok) {
-        setEventMessage('Event details and theme updated successfully!');
-        setEvent({ 
-          location: editLocation.trim(), 
-          date: editDate.trim(), 
-          time: editTime.trim(),
-          theme: editTheme 
-        });
+        setEventMessage('Event details updated successfully!');
+        setEvent({ location: editLocation.trim(), date: editDate.trim(), time: editTime.trim() });
         setShowEditForm(false);
       } else {
         const data = await res.json();
@@ -216,15 +198,6 @@ export default function Host() {
     router.push('/login');
   };
 
-  const themeOptions = [
-    { value: 'birthday', label: 'Birthday Party' },
-    { value: 'wedding', label: 'Wedding' },
-    { value: 'majlis', label: 'Majlis' },
-    { value: 'dares', label: 'Dares / Adventure' },
-    { value: 'baby-shower', label: 'Baby Shower' },
-    { value: 'anniversary', label: 'Anniversary' },
-  ];
-
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="bg-green-600 text-white p-4 shadow-md">
@@ -257,7 +230,7 @@ export default function Host() {
           </div>
         </div>
 
-        {/* Current Event Details + Theme Selector */}
+        {/* Current Event Details + Edit Button */}
         <div className="bg-white p-6 rounded-lg shadow-lg">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">Current Event Details</h2>
@@ -265,72 +238,51 @@ export default function Host() {
               onClick={() => setShowEditForm(!showEditForm)}
               className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition"
             >
-              {showEditForm ? 'Cancel' : 'Edit Event & Theme'}
+              {showEditForm ? 'Cancel' : 'Edit Event Details'}
             </button>
           </div>
 
-          <div className="bg-gray-50 p-6 rounded-lg mb-6">
+          <div className="bg-gray-50 p-6 rounded-lg">
             <p className="text-lg mb-2"><strong>Location:</strong> {event.location || 'Not set'}</p>
             <p className="text-lg mb-2"><strong>Date:</strong> {event.date || 'Not set'}</p>
-            <p className="text-lg mb-2"><strong>Time:</strong> {event.time || 'Not set'}</p>
-            <p className="text-lg"><strong>Theme:</strong> <span className="capitalize font-medium">{(event.theme || 'birthday').replace('-', ' ')}</span></p>
+            <p className="text-lg"><strong>Time:</strong> {event.time || 'Not set'}</p>
           </div>
 
           {showEditForm && (
-            <form onSubmit={handleUpdateEvent} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <input
-                  type="text"
-                  placeholder="Location"
-                  value={editLocation}
-                  onChange={(e) => setEditLocation(e.target.value)}
-                  required
-                  className="px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
-                />
-                <input
-                  type="text"
-                  placeholder="Date (e.g. 2025-12-31)"
-                  value={editDate}
-                  onChange={(e) => setEditDate(e.target.value)}
-                  required
-                  className="px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
-                />
-                <input
-                  type="text"
-                  placeholder="Time (e.g. 7:00 PM)"
-                  value={editTime}
-                  onChange={(e) => setEditTime(e.target.value)}
-                  required
-                  className="px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
-                />
+            <form onSubmit={handleUpdateEvent} className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <input
+                type="text"
+                placeholder="Location"
+                value={editLocation}
+                onChange={(e) => setEditLocation(e.target.value)}
+                required
+                className="px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
+              />
+              <input
+                type="text"
+                placeholder="Date (e.g. 2025-12-31)"
+                value={editDate}
+                onChange={(e) => setEditDate(e.target.value)}
+                required
+                className="px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
+              />
+              <input
+                type="text"
+                placeholder="Time (e.g. 7:00 PM)"
+                value={editTime}
+                onChange={(e) => setEditTime(e.target.value)}
+                required
+                className="px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
+              />
+              <div className="md:col-span-3">
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="bg-green-600 text-white px-8 py-3 rounded-md hover:bg-green-700 disabled:opacity-70 transition"
+                >
+                  {isLoading ? 'Saving...' : 'Save Changes'}
+                </button>
               </div>
-
-              <div>
-                <label className="block text-lg font-medium mb-4">Choose Invitation Theme</label>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {themeOptions.map((t) => (
-                    <label key={t.value} className="flex items-center cursor-pointer bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition">
-                      <input
-                        type="radio"
-                        name="theme"
-                        value={t.value}
-                        checked={editTheme === t.value}
-                        onChange={(e) => setEditTheme(e.target.value)}
-                        className="mr-3 w-5 h-5"
-                      />
-                      <span className="text-lg">{t.label}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full bg-green-600 text-white py-4 rounded-md hover:bg-green-700 disabled:opacity-70 transition text-xl font-medium"
-              >
-                {isLoading ? 'Saving...' : 'Save Event & Theme'}
-              </button>
             </form>
           )}
 
