@@ -141,6 +141,63 @@ export default function Host() {
     }
   };
 
+  const handleCsvUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setMessage('Processing CSV...');
+    setIsLoading(true);
+
+    const text = await file.text();
+    const lines = text.split('\n').map(line => line.trim()).filter(line => line);
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setMessage('You are not logged in.');
+      setIsLoading(false);
+      return;
+    }
+
+    let addedCount = 0;
+    let errorCount = 0;
+
+    for (const line of lines) {
+      if (!line || line.startsWith('name')) continue; // Skip header
+      const [name, phone, familySizeStr] = line.split(',').map(s => s.trim());
+      if (!name || !phone) {
+        errorCount++;
+        continue;
+      }
+
+      const family_size = parseInt(familySizeStr) || 1;
+
+      try {
+        const res = await fetch('/api/add-invitee', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ name, phone, family_size }),
+        });
+
+        if (res.ok) {
+          addedCount++;
+        } else {
+          errorCount++;
+        }
+      } catch (err) {
+        errorCount++;
+      }
+    }
+
+    setMessage(`Bulk upload complete! Added: ${addedCount}, Failed: ${errorCount}`);
+    fetchInvitees(token);
+    setIsLoading(false);
+
+    e.target.value = '';
+  };
+
   const handleUpdateEvent = async (e: React.FormEvent) => {
     e.preventDefault();
     setEventMessage('');
@@ -297,6 +354,26 @@ export default function Host() {
           )}
         </div>
 
+        {/* Bulk Invite via CSV */}
+        <div className="bg-white p-8 rounded-xl shadow-lg">
+          <h2 className="text-2xl font-bold mb-6 text-gray-800">Bulk Invite (Upload CSV)</h2>
+          <p className="text-lg text-gray-600 mb-6">
+            Upload a CSV file with columns: <strong>name</strong>, <strong>phone</strong>, <strong>family_size</strong><br />
+            Example: John Doe,+1234567890,4
+          </p>
+          <input
+            type="file"
+            accept=".csv"
+            onChange={handleCsvUpload}
+            className="block w-full text-lg text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:border-blue-500 p-4 file:mr-4 file:py-3 file:px-6 file:rounded-lg file:border-0 file:text-lg file:font-medium file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+          />
+          {message && message.includes('Bulk') && (
+            <p className={`mt-6 text-center text-xl font-medium ${message.includes('complete') ? 'text-green-600' : 'text-red-600'}`}>
+              {message}
+            </p>
+          )}
+        </div>
+
         {/* Add New Invitee */}
         <div className="bg-white p-8 rounded-xl shadow-lg">
           <h2 className="text-2xl font-bold mb-6 text-gray-800">Add New Invitee</h2>
@@ -333,7 +410,7 @@ export default function Host() {
               Add Invitee
             </button>
           </form>
-          {message && (
+          {message && !message.includes('Bulk') && (
             <p className={`mt-6 text-center text-xl font-medium ${message.includes('success') ? 'text-green-600' : 'text-red-600'}`}>
               {message}
             </p>
