@@ -4,12 +4,12 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 
 const themes = {
-  birthday: { bg: 'from-yellow-100 to-pink-100', titleColor: 'text-pink-800', accent: 'bg-pink-200', image: 'https://png.pngtree.com/thumb_back/fh260/background/20240620/pngtree-candlelit-celebration-a-birthday-invitation-image_15905940.jpg' },
-  wedding: { bg: 'from-rose-100 to-purple-100', titleColor: 'text-rose-800', accent: 'bg-rose-200', image: 'https://png.pngtree.com/thumb_back/fh260/background/20250226/pngtree-blue-watercolor-floral-background-flower-bouquet-illustration-wedding-invitation-design-spring-image_16961730.jpg' },
-  majlis: { bg: 'from-emerald-100 to-teal-100', titleColor: 'text-emerald-800', accent: 'bg-emerald-200', image: 'https://images.template.net/398957/Muharram-Majlis-Background-Template-edit-online.png' },
-  dares: { bg: 'from-orange-100 to-red-100', titleColor: 'text-orange-800', accent: 'bg-orange-200', image: 'https://media.istockphoto.com/id/1006002682/photo/enter-if-you-dare.jpg?s=612x612&w=0&k=20&c=ubuVm3DEOyKVH2ojmCmECzRsFy4IVC8woxXFJ-Dunyw=' },
-  'baby-shower': { bg: 'from-blue-100 to-cyan-100', titleColor: 'text-blue-800', accent: 'bg-blue-200', image: 'https://img.freepik.com/free-psd/maternity-baby-shower-background_23-2150237221.jpg?semt=ais_hybrid&w=740&q=80' },
-  anniversary: { bg: 'from-indigo-100 to-purple-100', titleColor: 'text-indigo-800', accent: 'bg-indigo-200', image: 'https://thumbs.dreamstime.com/b/anniversary-celebration-background-gold-white-purple-balloons-confetti-birthday-greeting-card-party-invitation-379350865.jpg' },
+  birthday: { bg: 'from-yellow-100 to-pink-100', titleColor: 'text-pink-800', accent: 'bg-pink-200', image: 'https://img.freepik.com/free-vector/hand-drawn-birthday-background_23-2150653938.jpg' },
+  wedding: { bg: 'from-rose-100 to-purple-100', titleColor: 'text-rose-800', accent: 'bg-rose-200', image: 'https://img.freepik.com/free-vector/elegant-wedding-invitation-template_23-2149644235.jpg' },
+  majlis: { bg: 'from-emerald-100 to-teal-100', titleColor: 'text-emerald-800', accent: 'bg-emerald-200', image: 'https://img.freepik.com/free-vector/ramadan-kareem-background_23-2149371942.jpg' },
+  dares: { bg: 'from-orange-100 to-red-100', titleColor: 'text-orange-800', accent: 'bg-orange-200', image: 'https://img.freepik.com/free-vector/adventure-background-flat-design_23-2148095499.jpg' },
+  'baby-shower': { bg: 'from-blue-100 to-cyan-100', titleColor: 'text-blue-800', accent: 'bg-blue-200', image: 'https://img.freepik.com/free-vector/baby-shower-background_23-2148471471.jpg' },
+  anniversary: { bg: 'from-indigo-100 to-purple-100', titleColor: 'text-indigo-800', accent: 'bg-indigo-200', image: 'https://img.freepik.com/free-vector/anniversary-background_23-2148471472.jpg' },
 } as const;
 
 type ThemeKey = keyof typeof themes;
@@ -70,19 +70,19 @@ export default function Invitation() {
     }
   };
 
-  if (isLoading) return <div className="min-h-screen flex items-center justify-center text-3xl font-bold">Loading Invitation...</div>;
+  if (isLoading) return <div className="min-h-screen flex items-center justify-center text-3xl font-bold text-gray-800">Loading Invitation...</div>;
   if (!invitee) return <div className="min-h-screen flex items-center justify-center text-red-600 text-3xl font-bold">{message || 'Invalid Invitation'}</div>;
 
   return (
     <div className={`min-h-screen bg-gradient-to-br ${currentTheme.bg} flex items-center justify-center p-4`}>
       <div className="relative bg-white/90 backdrop-blur-md p-12 rounded-3xl shadow-2xl max-w-2xl w-full overflow-hidden">
-        {/* Theme Background Image */}
-        <div className="absolute inset-0 opacity-20">
+        {/* Faint Theme Background Image */}
+        <div className="absolute inset-0 opacity-15">
           <img src={currentTheme.image} alt="Theme background" className="w-full h-full object-cover" />
         </div>
 
         {/* Decorative Border */}
-        <div className={`absolute inset-0 border-8 border-double rounded-3xl ${currentTheme.accent} opacity-50`}></div>
+        <div className={`absolute inset-0 border-8 border-double rounded-3xl ${currentTheme.accent} opacity-60`}></div>
 
         <div className="relative z-10">
           <h1 className={`text-5xl font-bold text-center mb-6 ${currentTheme.titleColor}`}>You're Invited!</h1>
