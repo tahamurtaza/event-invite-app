@@ -4,12 +4,12 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 
 const themes = {
-  birthday: { bg: 'from-yellow-100 to-pink-100', titleColor: 'text-pink-800', accent: 'bg-pink-200', image: 'https://img.freepik.com/free-vector/hand-drawn-birthday-background_23-2150653938.jpg' },
-  wedding: { bg: 'from-rose-100 to-purple-100', titleColor: 'text-rose-800', accent: 'bg-rose-200', image: 'https://img.freepik.com/free-vector/elegant-wedding-invitation-template_23-2149644235.jpg' },
-  majlis: { bg: 'from-emerald-100 to-teal-100', titleColor: 'text-emerald-800', accent: 'bg-emerald-200', image: 'https://img.freepik.com/free-vector/ramadan-kareem-background_23-2149371942.jpg' },
-  dares: { bg: 'from-orange-100 to-red-100', titleColor: 'text-orange-800', accent: 'bg-orange-200', image: 'https://img.freepik.com/free-vector/adventure-background-flat-design_23-2148095499.jpg' },
-  'baby-shower': { bg: 'from-blue-100 to-cyan-100', titleColor: 'text-blue-800', accent: 'bg-blue-200', image: 'https://img.freepik.com/free-vector/baby-shower-background_23-2148471471.jpg' },
-  anniversary: { bg: 'from-indigo-100 to-purple-100', titleColor: 'text-indigo-800', accent: 'bg-indigo-200', image: 'https://img.freepik.com/free-vector/anniversary-background_23-2148471472.jpg' },
+  birthday: { bg: 'from-yellow-200 to-pink-200', titleColor: 'text-pink-700', accent: 'bg-pink-300', image: 'https://img.freepik.com/free-vector/hand-drawn-birthday-background_23-2150653938.jpg' },
+  wedding: { bg: 'from-rose-200 to-purple-200', titleColor: 'text-rose-700', accent: 'bg-rose-300', image: 'https://img.freepik.com/free-vector/elegant-wedding-invitation-template_23-2149644235.jpg' },
+  majlis: { bg: 'from-emerald-200 to-teal-200', titleColor: 'text-emerald-700', accent: 'bg-emerald-300', image: 'https://img.freepik.com/free-vector/ramadan-kareem-background_23-2149371942.jpg' },
+  dares: { bg: 'from-orange-200 to-red-200', titleColor: 'text-orange-700', accent: 'bg-orange-300', image: 'https://img.freepik.com/free-vector/adventure-background-flat-design_23-2148095499.jpg' },
+  'baby-shower': { bg: 'from-blue-200 to-cyan-200', titleColor: 'text-blue-700', accent: 'bg-blue-300', image: 'https://img.freepik.com/free-vector/baby-shower-background_23-2148471471.jpg' },
+  anniversary: { bg: 'from-indigo-200 to-purple-200', titleColor: 'text-indigo-700', accent: 'bg-indigo-300', image: 'https://img.freepik.com/free-vector/anniversary-background_23-2148471472.jpg' },
 } as const;
 
 type ThemeKey = keyof typeof themes;
@@ -32,7 +32,7 @@ export default function Invitation() {
           setMessage(data.error);
         } else {
           setInvitee(data.invitee);
-          const loadedTheme = (data.event.theme && data.event.theme in themes) ? data.event.theme as ThemeKey : 'birthday';
+          const loadedTheme: ThemeKey = (data.event.theme && data.event.theme in themes) ? data.event.theme as ThemeKey : 'birthday';
           setEvent({
             location: data.event.location || '',
             date: data.event.date || '',
@@ -75,65 +75,65 @@ export default function Invitation() {
 
   return (
     <div className={`min-h-screen bg-gradient-to-br ${currentTheme.bg} flex items-center justify-center p-4`}>
-      <div className="relative bg-white/90 backdrop-blur-md p-12 rounded-3xl shadow-2xl max-w-2xl w-full overflow-hidden">
-        {/* Faint Theme Background Image */}
-        <div className="absolute inset-0 opacity-15">
+      <div className="relative bg-white/95 backdrop-blur-lg p-12 rounded-3xl shadow-2xl max-w-2xl w-full overflow-hidden">
+        {/* Faint Background Image */}
+        <div className="absolute inset-0 opacity-10">
           <img src={currentTheme.image} alt="Theme background" className="w-full h-full object-cover" />
         </div>
 
-        {/* Decorative Border */}
-        <div className={`absolute inset-0 border-8 border-double rounded-3xl ${currentTheme.accent} opacity-60`}></div>
+        {/* Decorative Accent Border */}
+        <div className={`absolute inset-0 border-12 border-double rounded-3xl ${currentTheme.accent} opacity-70`}></div>
 
         <div className="relative z-10">
-          <h1 className={`text-5xl font-bold text-center mb-6 ${currentTheme.titleColor}`}>You're Invited!</h1>
-          <p className="text-3xl text-center font-medium mb-10 text-gray-800">Dear {invitee.name},</p>
+          <h1 className={`text-6xl font-extrabold text-center mb-6 ${currentTheme.titleColor} drop-shadow-lg`}>You're Invited!</h1>
+          <p className="text-4xl text-center font-medium mb-12 text-gray-800 drop-shadow">Dear {invitee.name},</p>
 
-          <div className={`p-8 rounded-2xl mb-10 shadow-lg ${currentTheme.accent} bg-white/80`}>
-            <p className="text-2xl mb-4 text-gray-800"><strong>Location:</strong> {event.location || 'To be announced'}</p>
-            <p className="text-2xl mb-4 text-gray-800"><strong>Date:</strong> {event.date || 'To be announced'}</p>
-            <p className="text-2xl mb-4 text-gray-800"><strong>Time:</strong> {event.time || 'To be announced'}</p>
-            <p className="text-2xl text-gray-800">You + up to {invitee.family_size - 1} guests = {invitee.family_size} total</p>
+          <div className={`p-10 rounded-3xl mb-12 shadow-2xl ${currentTheme.accent} bg-white/90`}>
+            <p className="text-3xl mb-6 text-gray-800"><strong>Location:</strong> {event.location || 'To be announced'}</p>
+            <p className="text-3xl mb-6 text-gray-800"><strong>Date:</strong> {event.date || 'To be announced'}</p>
+            <p className="text-3xl mb-6 text-gray-800"><strong>Time:</strong> {event.time || 'To be announced'}</p>
+            <p className="text-3xl text-gray-800">You + up to {invitee.family_size - 1} guests = {invitee.family_size} total</p>
           </div>
 
           {!submitted ? (
-            <form onSubmit={handleSubmit} className="space-y-8">
-              <div className="space-y-6">
-                <label className="flex items-center text-2xl font-medium text-gray-800 cursor-pointer">
-                  <input type="radio" name="coming" checked={coming === true} onChange={() => setComing(true)} className="mr-4 w-8 h-8" />
+            <form onSubmit={handleSubmit} className="space-y-10">
+              <div className="space-y-8">
+                <label className="flex items-center text-3xl font-medium text-gray-800 cursor-pointer hover:text-gray-900 transition">
+                  <input type="radio" name="coming" checked={coming === true} onChange={() => setComing(true)} className="mr-6 w-10 h-10" />
                   <span>Yes, we're coming! 🎉</span>
                 </label>
-                <label className="flex items-center text-2xl font-medium text-gray-800 cursor-pointer">
-                  <input type="radio" name="coming" checked={coming === false} onChange={() => setComing(false)} className="mr-4 w-8 h-8" />
+                <label className="flex items-center text-3xl font-medium text-gray-800 cursor-pointer hover:text-gray-900 transition">
+                  <input type="radio" name="coming" checked={coming === false} onChange={() => setComing(false)} className="mr-6 w-10 h-10" />
                   <span>Sorry, can't make it 😢</span>
                 </label>
               </div>
 
               {coming && (
                 <div>
-                  <label className="block text-2xl font-medium mb-4 text-gray-800">Number of attendees</label>
+                  <label className="block text-3xl font-medium mb-6 text-gray-800">Number of attendees</label>
                   <input
                     type="number"
                     value={people}
                     onChange={(e) => setPeople(Math.min(parseInt(e.target.value) || 1, invitee.family_size))}
                     min={1}
                     max={invitee.family_size}
-                    className="w-full px-6 py-4 border-4 border-gray-300 rounded-xl text-2xl text-center focus:border-purple-500"
+                    className="w-full px-8 py-6 border-4 border-gray-300 rounded-2xl text-3xl text-center focus:border-gray-500 transition"
                   />
                 </div>
               )}
 
-              <button type="submit" className={`w-full py-6 rounded-xl text-3xl font-bold text-white transition transform hover:scale-105 ${currentTheme.accent.replace('200', '600')}`}>
+              <button type="submit" className={`w-full py-8 rounded-2xl text-4xl font-bold text-white transition transform hover:scale-105 shadow-lg ${currentTheme.accent.replace('300', '600')}`}>
                 Submit RSVP
               </button>
             </form>
           ) : (
             <div className="text-center">
-              <p className="text-5xl font-bold text-green-600 mb-6">Thank You! ❤️</p>
-              <p className="text-3xl text-gray-800">Your response: {coming ? `Coming with ${people} people 🎊` : 'Not coming 😔'}</p>
+              <p className="text-6xl font-bold text-green-600 mb-8">Thank You! ❤️</p>
+              <p className="text-4xl text-gray-800">Your response: {coming ? `Coming with ${people} people 🎊` : 'Not coming 😔'}</p>
             </div>
           )}
 
-          {message && <p className={`mt-8 text-center text-2xl font-bold ${message.includes('Thank') ? 'text-green-600' : 'text-red-600'}`}>{message}</p>}
+          {message && <p className={`mt-12 text-center text-3xl font-bold ${message.includes('Thank') ? 'text-green-600' : 'text-red-600'}`}>{message}</p>}
         </div>
       </div>
     </div>

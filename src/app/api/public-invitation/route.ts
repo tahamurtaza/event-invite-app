@@ -24,7 +24,8 @@ export async function GET(req: NextRequest) {
     theme: invitee.events?.theme || 'birthday',
   };
 
-  const { events, ...inviteeClean } = invitee;
+  // Clean invitee object (remove the joined events)
+  const { events, ...inviteeClean } = invitee as any;
 
   return NextResponse.json({ invitee: inviteeClean, event });
 }
