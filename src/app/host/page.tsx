@@ -89,7 +89,7 @@ export default function Host() {
     list.forEach((invitee) => {
       if (invitee.rsvp_coming === true) {
         attending += invitee.rsvp_people;
-        notAttending += (invitee.family_size - invitee.rsvp_people); // Remaining family not coming
+        notAttending += (invitee.family_size - invitee.rsvp_people);
       } else if (invitee.rsvp_coming === false) {
         notAttending += invitee.family_size;
       } else {
