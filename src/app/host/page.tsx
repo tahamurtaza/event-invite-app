@@ -89,6 +89,7 @@ export default function Host() {
     list.forEach((invitee) => {
       if (invitee.rsvp_coming === true) {
         attending += invitee.rsvp_people;
+        notAttending += (invitee.family_size - invitee.rsvp_people); // Remaining family not coming
       } else if (invitee.rsvp_coming === false) {
         notAttending += invitee.family_size;
       } else {
@@ -327,7 +328,7 @@ export default function Host() {
             <button
               type="submit"
               disabled={isLoading}
-              className="bg-blue-600 text-white py-4 rounded-lg text-xl font-medium hover:bg-blue-700 transition"
+              className="bg-green-600 text-white py-4 rounded-lg text-xl font-medium hover:bg-green-700 transition"
             >
               Add Invitee
             </button>
