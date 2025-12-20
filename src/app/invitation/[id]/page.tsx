@@ -4,12 +4,12 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 
 const themes = {
-  birthday: { bg: 'from-yellow-100 to-pink-100', titleColor: 'text-pink-800', accent: 'bg-pink-200', image: 'https://as1.ftcdn.net/jpg/10/35/49/94/1000_F_1035499464_DZzrQ18oTiye8gu6ndJ7qqjUHPjIe36u.jpg' },
-  wedding: { bg: 'from-rose-100 to-purple-100', titleColor: 'text-rose-800', accent: 'bg-rose-200', image: 'https://thumbs.dreamstime.com/b/elegant-wedding-invitation-card-template-features-beautifully-designed-golden-rings-delicate-flowers-crisp-white-364321365.jpg' },
-  majlis: { bg: 'from-emerald-100 to-teal-100', titleColor: 'text-emerald-800', accent: 'bg-emerald-200', image: 'https://thumbs.dreamstime.com/b/ramadan-kareem-islamic-greeting-background-lanterns-star-decorations-traditional-eid-celebration-design-festive-holiday-389995168.jpg' },
-  dares: { bg: 'from-orange-100 to-red-100', titleColor: 'text-orange-800', accent: 'bg-orange-200', image: 'https://thumbs.dreamstime.com/b/campfire-cooking-deer-watching-rocky-mountain-landscape-night-burns-brightly-frying-pan-nearby-three-graze--386594134.jpg' },
-  'baby-shower': { bg: 'from-blue-100 to-cyan-100', titleColor: 'text-blue-800', accent: 'bg-blue-200', image: 'https://static.vecteezy.com/system/resources/thumbnails/023/211/986/small/baby-toys-watercolor-frame-hand-drawn-rectangular-border-on-isolated-background-template-for-greeting-cards-or-newborn-shower-invitations-in-pastel-blue-and-beige-colors-childish-backdrop-vector.jpg' },
-  anniversary: { bg: 'from-indigo-100 to-purple-100', titleColor: 'text-indigo-800', accent: 'bg-indigo-200', image: 'https://static.vecteezy.com/system/resources/thumbnails/036/469/548/small/ai-generated-valentine-s-day-background-with-red-roses-and-candles-on-wooden-table-photo.jpg' },
+  birthday: { bg: 'from-yellow-100 to-pink-100', titleColor: 'text-pink-800', accent: 'bg-pink-200', image: 'https://png.pngtree.com/thumb_back/fh260/background/20240620/pngtree-candlelit-celebration-a-birthday-invitation-image_15905940.jpg' },
+  wedding: { bg: 'from-rose-100 to-purple-100', titleColor: 'text-rose-800', accent: 'bg-rose-200', image: 'https://png.pngtree.com/thumb_back/fh260/background/20250226/pngtree-blue-watercolor-floral-background-flower-bouquet-illustration-wedding-invitation-design-spring-image_16961730.jpg' },
+  majlis: { bg: 'from-emerald-100 to-teal-100', titleColor: 'text-emerald-800', accent: 'bg-emerald-200', image: 'https://images.template.net/398957/Muharram-Majlis-Background-Template-edit-online.png' },
+  dares: { bg: 'from-orange-100 to-red-100', titleColor: 'text-orange-800', accent: 'bg-orange-200', image: 'https://media.istockphoto.com/id/1006002682/photo/enter-if-you-dare.jpg?s=612x612&w=0&k=20&c=ubuVm3DEOyKVH2ojmCmECzRsFy4IVC8woxXFJ-Dunyw=' },
+  'baby-shower': { bg: 'from-blue-100 to-cyan-100', titleColor: 'text-blue-800', accent: 'bg-blue-200', image: 'https://img.freepik.com/free-psd/maternity-baby-shower-background_23-2150237221.jpg?semt=ais_hybrid&w=740&q=80' },
+  anniversary: { bg: 'from-indigo-100 to-purple-100', titleColor: 'text-indigo-800', accent: 'bg-indigo-200', image: 'https://thumbs.dreamstime.com/b/anniversary-celebration-background-gold-white-purple-balloons-confetti-birthday-greeting-card-party-invitation-379350865.jpg' },
 } as const;
 
 type ThemeKey = keyof typeof themes;
@@ -32,7 +32,7 @@ export default function Invitation() {
           setMessage(data.error);
         } else {
           setInvitee(data.invitee);
-          const loadedTheme = data.event.theme && data.event.theme in themes ? data.event.theme as ThemeKey : 'birthday';
+          const loadedTheme = (data.event.theme && data.event.theme in themes) ? data.event.theme as ThemeKey : 'birthday';
           setEvent({
             location: data.event.location || '',
             date: data.event.date || '',
