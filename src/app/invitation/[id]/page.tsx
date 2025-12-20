@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 
-const themes = {
+const themes: Record<string, { bg: string; title: string; greeting: string }> = {
   birthday: { bg: 'from-pink-50 to-yellow-50', title: "You're Invited to a Birthday Bash!", greeting: "Let's Celebrate!" },
   wedding: { bg: 'from-rose-50 to-purple-50', title: "You're Invited to Our Wedding!", greeting: "Join Us on Our Special Day" },
   majlis: { bg: 'from-emerald-50 to-teal-50', title: "You're Invited to a Majlis Gathering!", greeting: "Come Share Joy With Us" },
@@ -37,6 +37,7 @@ export default function Invitation() {
             setPeople(data.invitee.rsvp_people || 1);
           }
         }
+        
       })
       .catch(() => setMessage('Error loading invitation'))
       .finally(() => setIsLoading(false));
